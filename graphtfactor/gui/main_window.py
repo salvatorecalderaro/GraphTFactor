@@ -1,40 +1,9 @@
 import os
-
-
-from PySide6.QtWidgets import (
-
-    QMainWindow,
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QLabel,
-    QPushButton,
-    QTextEdit,
-    QComboBox,
-    QTabWidget,
-    QFileDialog,
-    QMessageBox
-
-)
-
-
-from PySide6.QtGui import (
-
-    QIcon,
-    QAction
-
-)
-
-
+from PySide6.QtWidgets import (QMainWindow,QWidget,QVBoxLayout,QHBoxLayout,QLabel,QPushButton,QTextEdit,QComboBox,QTabWidget,QFileDialog,QMessageBox)
+from PySide6.QtGui import QIcon, QAction
 from PySide6.QtCore import Qt
-
-
-
 #from .settings import ESM_MODELS
-
 from .styles import STYLE
-
-
 from graphtfactor.core.device import available_devices
 
 
@@ -42,51 +11,23 @@ from graphtfactor.core.device import available_devices
 
 
 class GraphTFactorWindow(QMainWindow):
-
-
     def __init__(self):
-
         super().__init__()
-
-
-        self.setWindowTitle(
-            "GraphTFactor v1.0"
-        )
-
-
-        self.resize(
-            1000,
-            750
-        )
+        self.setWindowTitle( "GraphTFactor v1.0")
+        self.resize(1000,750)
 
 
         #
         # Logo
         #
 
-        logo = os.path.join(
-
-            os.path.dirname(
-                os.path.dirname(__file__)
-            ),
-
-            "resources",
-            "logo.png"
-
-        )
+        logo = os.path.join(os.path.dirname(os.path.dirname(__file__)),"resources","logo.png")
 
 
         if os.path.exists(logo):
+            self.setWindowIcon(QIcon(logo))
 
-            self.setWindowIcon(
-                QIcon(logo)
-            )
-
-
-
-        self.setStyleSheet(
-            STYLE
-        )
+        self.setStyleSheet(STYLE)
 
 
         self.create_menu()
@@ -101,86 +42,50 @@ class GraphTFactorWindow(QMainWindow):
 
 
     def create_menu(self):
-
-
         menu = self.menuBar()
+        file_menu = menu.addMenu("File")
+
+        open_action = QAction("Open FASTA",self)
+        exit_action = QAction("Exit", self)
+        exit_action.triggered.connect(self.close)
 
 
-        file_menu = menu.addMenu(
-            "File"
-        )
-
-
-        open_action = QAction(
-            "Open FASTA",
-            self
-        )
-
-
-        exit_action = QAction(
-            "Exit",
-            self
-        )
-
-
-        exit_action.triggered.connect(
-            self.close
-        )
-
-
-        file_menu.addAction(
-            open_action
-        )
+        file_menu.addAction(open_action)
 
         file_menu.addSeparator()
 
-        file_menu.addAction(
-            exit_action
-        )
+        file_menu.addAction(exit_action)
 
 
 
-        help_menu = menu.addMenu(
-            "Help"
-        )
+        help_menu = menu.addMenu("Help")
 
 
-        about = QAction(
-            "About",
-            self
-        )
+        about = QAction("About",self)
 
 
-        about.triggered.connect(
-            self.show_about
-        )
-
-
-        help_menu.addAction(
-            about
-        )
+        about.triggered.connect(self.show_about)
+        help_menu.addAction(about)
 
 
 
     def show_about(self):
 
 
-        QMessageBox.about(
-
-            self,
+        QMessageBox.about(self,
 
             "GraphTFactor",
 
-            """
-GraphTFactor v1.0
+        """
+        GraphTFactor v1.0
 
-Graph Neural Network
-Transcription Factor prediction
+        Graph Neural Network
+        Transcription Factor prediction
 
-ESM embeddings +
-Graph explainability
+        ESM embeddings +
+        Graph explainability
 
-"""
+        """
 
         )
 
@@ -205,21 +110,13 @@ Graph explainability
 
 
 
-        title = QLabel(
-
-            "GraphTFactor Prediction"
-
-        )
+        title = QLabel("GraphTFactor Prediction")
 
 
-        title.setAlignment(
-            Qt.AlignCenter
-        )
+        title.setAlignment(Qt.AlignCenter)
 
 
-        layout.addWidget(
-            title
-        )
+        layout.addWidget(title)
 
 
 
@@ -242,38 +139,24 @@ Graph explainability
         self.device_box = QComboBox()
 
 
-        self.device_box.addItems(
-
-            available_devices()
-
-        )
+        self.device_box.addItems(available_devices())
 
 
 
-        settings.addWidget(
-            QLabel("ESM:")
-        )
+        settings.addWidget(QLabel("ESM:"))
 
 
-        settings.addWidget(
-            self.esm_box
-        )
+        settings.addWidget(self.esm_box)
 
 
-        settings.addWidget(
-            QLabel("Device:")
-        )
+        settings.addWidget(QLabel("Device:"))
 
 
-        settings.addWidget(
-            self.device_box
-        )
+        settings.addWidget(self.device_box)
 
 
 
-        layout.addLayout(
-            settings
-        )
+        layout.addLayout(settings)
 
 
 
@@ -283,66 +166,36 @@ Graph explainability
         self.sequence = QTextEdit()
 
 
-        self.sequence.setPlaceholderText(
-
-            "Insert protein sequence..."
-
-        )
+        self.sequence.setPlaceholderText("Insert protein sequence...")
 
 
-        layout.addWidget(
-            self.sequence
-        )
-
-
+        layout.addWidget(self.sequence)
 
         buttons = QHBoxLayout()
 
+        load = QPushButton("Load FASTA")
 
 
-        load = QPushButton(
-            "Load FASTA"
-        )
+        predict = QPushButton("Predict")
 
 
-        predict = QPushButton(
-            "Predict"
-        )
+        buttons.addWidget(load)
 
 
-        buttons.addWidget(
-            load
-        )
+        buttons.addWidget(predict)
 
-
-        buttons.addWidget(
-            predict
-        )
+        layout.addLayout(buttons)
 
 
 
-        layout.addLayout(
-            buttons
-        )
+        self.result = QLabel("Prediction result")
+
+
+        layout.addWidget(self.result)
 
 
 
-        self.result = QLabel(
-
-            "Prediction result"
-
-        )
-
-
-        layout.addWidget(
-            self.result
-        )
-
-
-
-        prediction.setLayout(
-            layout
-        )
+        prediction.setLayout(layout)
 
 
 
@@ -356,61 +209,33 @@ Graph explainability
         imp_layout = QVBoxLayout()
 
 
-        self.importance_label = QLabel(
-
-            "Feature importance will appear here"
-
-        )
+        self.importance_label = QLabel("Feature importance will appear here")
 
 
-        imp_layout.addWidget(
-
-            self.importance_label
-
-        )
+        imp_layout.addWidget(self.importance_label)
 
 
-        importance.setLayout(
-            imp_layout
-        )
+        importance.setLayout(imp_layout)
 
 
 
 
-        tabs.addTab(
-            prediction,
-            "Prediction"
-        )
+        tabs.addTab(prediction,"Prediction")
 
 
-        tabs.addTab(
-            importance,
-            "Feature Importance"
-        )
+        tabs.addTab(importance,"Feature Importance")
 
 
 
-        self.setCentralWidget(
-            tabs
-        )
+        self.setCentralWidget(tabs)
 
 
-        self.statusBar().showMessage(
+        self.statusBar().showMessage("Ready")
 
-            "Ready"
-
-        )
+        load.clicked.connect(self.load_fasta)
 
 
-
-        load.clicked.connect(
-            self.load_fasta
-        )
-
-
-        predict.clicked.connect(
-            self.predict
-        )
+        predict.clicked.connect(self.predict)
 
 
 
@@ -424,45 +249,24 @@ Graph explainability
 
 
         filename,_ = QFileDialog.getOpenFileName(
-
-            self,
-
-            "Open FASTA",
-
-            "",
-
-            "FASTA (*.fa *.fasta)"
-
+            self,"Open FASTA","", "FASTA (*.fa *.fasta)"
         )
 
 
         if filename:
-
-
             seq=""
-
-
             with open(filename) as f:
-
                 for line in f:
-
                     if not line.startswith(">"):
-
                         seq += line.strip()
 
 
 
-            self.sequence.setText(
-                seq
-            )
+            self.sequence.setText(seq)
 
 
 
-            self.statusBar().showMessage(
-
-                filename
-
-            )
+            self.statusBar().showMessage(filename)
 
 
 
@@ -471,51 +275,37 @@ Graph explainability
     def predict(self):
 
 
-        seq = (
-
-            self.sequence
-            .toPlainText()
-            .strip()
-
-        )
+        seq = (self.sequence.toPlainText().strip())
 
 
         if not seq:
-
-
-            self.result.setText(
-
-                "Insert sequence"
-
-            )
-
+            self.result.setText("Insert sequence")
             return
 
 
 
         esm = self.esm_box.currentText()
-
         device = self.device_box.currentText()
 
 
 
         self.result.setText(
 
-f"""
-Prediction
+            f"""
+            Prediction
 
-Model:
-{esm}
+            Model:
+            {esm}
 
-Device:
-{device}
+            Device:
+            {device}
 
-Result:
-Transcription Factor
+            Result:
+            Transcription Factor
 
-Probability:
-0.95
+            Probability:
+            0.95
 
-"""
+            """
 
         )
