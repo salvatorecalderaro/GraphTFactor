@@ -1,0 +1,23 @@
+[build-system]
+requires = [
+    "setuptools>=68",
+    "wheel"
+]
+
+build-backend = "setuptools.build_meta"
+
+
+[project]
+
+name = "graphtfactor"
+
+version = "1.0.0"
+
+description = "Graph Neural Network tool for transcription factor prediction"
+
+requires-python = ">=3.10"
+
+
+[project.scripts]
+
+graphtfactor = "graphtfactor.__main__:main"
