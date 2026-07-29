@@ -32,31 +32,14 @@ device, _ = identify_device()
 
 @st.cache_resource
 def cached_load_esm(esm_model, device):
-
-    model, alphabet = load_model(
-        esm_model,
-        device
-    )
-
+    model, alphabet = load_model(esm_model, device)
     return model, alphabet
 
 
 
 @st.cache_resource
-def cached_load_gnn(
-        organism,
-        esm_model,
-        in_channels,
-        device
-):
-
-    model = load_model_from_file(
-        organism,
-        esm_model,
-        in_channels,
-        device
-    )
-
+def cached_load_gnn(organism,esm_model,in_channels,device):
+    model = load_model_from_file(organism,esm_model,in_channels,device)
     return model
 
 
@@ -66,18 +49,12 @@ def cached_load_gnn(
 # ==========================
 
 with st.sidebar:
-
     try:
-
         logo = Image.open(LOGO_PATH)
-
-        st.image(
-            logo,
-            width=200
-        )
+        st.image(logo,width=200)
 
     except Exception:
-        pass
+        st.error(f"❌ Logo not found: {LOGO_PATH}")
 
 
     st.markdown(
@@ -116,10 +93,7 @@ st.markdown(
 # Sequence Input
 # ==========================
 
-sequence = st.text_area(
-    "Paste protein sequence",
-    height=180
-)
+sequence = st.text_area("Paste protein sequence",height=180)
 
 
 sequence = (
@@ -138,22 +112,12 @@ sequence = (
 # ==========================
 
 if sequence:
-
-
-    VALID_AA = set(
-        "ACDEFGHIKLMNPQRSTVWYXBZUO"
-    )
-
-
+    VALID_AA = set("ACDEFGHIKLMNPQRSTVWYXBZUO")
     invalid = set(sequence) - VALID_AA
-
 
     if invalid:
 
-        st.error(
-            f"Invalid residues detected: {invalid}"
-        )
-
+        st.error(f"Invalid residues detected: {invalid}")
         st.stop()
 
 
@@ -162,27 +126,14 @@ if sequence:
     # Protein information
     # ==========================
 
-    st.subheader(
-        "🧬 Protein information"
-    )
+    st.subheader("🧬 Protein information")
 
 
     aa = Counter(sequence)
-
-
     c1, c2 = st.columns(2)
 
-
-    c1.metric(
-        "Length",
-        f"{len(sequence)} aa"
-    )
-
-
-    c2.metric(
-        "Unknown",
-        aa.get("X", 0)
-    )
+    c1.metric("Length",f"{len(sequence)} aa")
+    c2.metric("Unknown",aa.get("X", 0))
 
 
 
@@ -190,21 +141,10 @@ if sequence:
     # Settings
     # ==========================
 
-    st.subheader(
-        "⚙️ Prediction settings"
-    )
+    st.subheader("⚙️ Prediction settings")
 
 
-    esm_model = st.selectbox(
-        "ESM-2 model",
-        [
-            6,
-            12,
-            30
-        ],
-        index=2
-    )
-
+    esm_model = st.selectbox("ESM-2 model",[6,12,30],index=0)
 
     organism = st.selectbox(
         "Organism",
@@ -223,49 +163,22 @@ if sequence:
     # Prediction
     # ==========================
 
-    if st.button(
-        "🔍 Predict Transcription Factor"
-    ):
-
-
+    if st.button("🔍 Predict Transcription Factor"):
         progress = st.progress(0)
-
         status = st.empty()
 
 
         try:
-
-
-            # ESM
-
-            status.info(
-                "🧬 Loading ESM-2 model..."
-            )
-
+            status.info("🧬 Loading ESM-2 model...")
             progress.progress(20)
 
-
-            esm_model = int(
-                esm_model
-            )
-
-
-            esm, alphabet = cached_load_esm(
-                esm_model,
-                device
-            )
-
-
-
+            esm_model = int(esm_model)
+            esm, alphabet = cached_load_esm(esm_model,device)
+            
             # Graph
-
-            status.info(
-                "🕸️ Building protein graph..."
-            )
+            status.info( "🕸️ Building protein graph...")
 
             progress.progress(50)
-
-
             graph = create_graph(
                 sequence,
                 esm,
@@ -279,91 +192,37 @@ if sequence:
 
             # Graph information
 
-            st.subheader(
-                "🕸️ Graph information"
-            )
-
-
+            st.subheader( "🕸️ Graph information")
             g1, g2, g3 = st.columns(3)
 
 
-            g1.metric(
-                "Nodes",
-                graph.num_nodes
-            )
-
-
-            g2.metric(
-                "Edges",
-                graph.num_edges
-            )
-
-
-            g3.metric(
-                "Features",
-                graph.num_node_features
-            )
-
+            g1.metric("Nodes",graph.num_nodes)
+            g2.metric("Edges",graph.num_edges)
+            g3.metric("Features", graph.num_node_features)
 
             progress.progress(70)
 
-
-
             # GNN prediction
-
-            status.info(
-                "🤖 Running Graph Neural Network..."
-            )
+            status.info("🤖 Running Graph Neural Network...")
 
 
-            gnn = cached_load_gnn(
-                organism,
-                esm_model,
-                graph.num_node_features,
-                device
-            )
+            gnn = cached_load_gnn(organism,esm_model,graph.num_node_features,device)
 
-
-            prediction, proba = predict_graph(
-                gnn,
-                graph,
-                device
-            )
-
-
+            prediction, proba = predict_graph(gnn,graph,device)
             progress.progress(100)
 
-
-            status.success(
-                "✅ Prediction completed"
-            )
-
-
-
+            status.success("✅ Prediction completed")
             # ==========================
             # Result
             # ==========================
 
-            st.subheader(
-                "Prediction result"
-            )
-
+            st.subheader("Prediction result")
 
             if prediction == 1:
-
-                result_label = (
-                    "✅ Transcription Factor"
-                )
-
+                result_label = ("✅ Transcription Factor")
                 confidence = proba
-
-
             else:
-
-                result_label = (
-                    "🚩 Non-Transcription Factor"
-                )
-
+                result_label = ("🚩 Non-Transcription Factor")
                 confidence = 1 - proba
 
 
@@ -372,7 +231,6 @@ if sequence:
 
 
             with r1:
-
                 st.markdown(
                     f"""
                     <div style="
@@ -388,36 +246,17 @@ if sequence:
 
 
             with r2:
+                st.metric("Confidence",f"{confidence*100:.2f}%")
 
-                st.metric(
-                    "Confidence",
-                    f"{confidence*100:.2f}%"
-                )
-
-
-
-            st.progress(
-                float(confidence)
-            )
+            st.progress(float(confidence))
 
 
 
             if prediction == 1:
-
-                st.success(
-                    "✅ The protein contains a Transcription Factor"
-                )
+                st.success("✅ The protein contains a Transcription Factor")
 
             else:
-
-                st.error(
-                    "🚩 The protein does NOT contain a Transcription Factor"
-                )
-
-
-
+                st.error("🚩 The protein does NOT contain a Transcription Factor")
+                
         except Exception as e:
-
-            st.error(
-                f"❌ Prediction error: {e}"
-            )
+            st.error(f"❌ Prediction error: {e}")
