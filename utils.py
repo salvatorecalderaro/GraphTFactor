@@ -46,13 +46,6 @@ def load_model(n_layers, device):
         model, alphabet = esm.pretrained.esm2_t12_35M_UR50D()
     elif n_layers == 30:
         model, alphabet = esm.pretrained.esm2_t30_150M_UR50D()
-    elif n_layers == 33:
-        model, alphabet = esm.pretrained.esm2_t33_650M_UR50D()
-    elif n_layers == 36:
-        model, alphabet = esm.pretrained.esm2_t36_3B_UR50D()
-    elif n_layers == 48:
-        model, alphabet = esm.pretrained.esm2_t48_15B_UR50D()
-        model = model.half()
     else:
         raise ValueError("Unsupported ESM model")
 

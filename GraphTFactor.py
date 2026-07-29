@@ -105,45 +105,18 @@ def train_net(device, net, trainloader, epochs, lr):
     return net, tc.duration
 
 
-# ----------------- Prediction -----------------
-def predict(device, net, dataloader, threshold=0.5):
+def predict_graph(model,graph,device):
     """
-    Predict the output of the GraphTFactor model.
-
+    Predict the label of a graph using the trained GraphTFactor model.
     Parameters:
+    - model (GraphTFactor): The trained GraphTFactor model.
+    - graph (torch_geometric.data.Data): The input graph data.
     - device (torch.device): The device to run the prediction on.
-    - net (GraphTFactor): The GraphTFactor model to be used for prediction.
-    - dataloader (torch_geometric.data.DataLoader): The DataLoader for the prediction data.
-    - threshold (float): The threshold for converting probabilities to binary predictions.
 
     Returns:
-    - all_targets (list): The true labels of the data.
-    - all_preds (list): The predicted labels of the data.
-    - all_proba (list): The predicted probabilities of the data.
+    - int: The predicted label of the graph.
+    - float: The predicted probability of the graph.
     """
-    net.to(device)
-    net.eval()
-
-    all_targets = []
-    all_preds = []
-    all_proba = []
-
-    with torch.no_grad():
-        for data in tqdm(dataloader, desc="Predicting"):
-            data = data.to(device)
-
-            logits = net(data)
-            probs = torch.sigmoid(logits)
-            preds = (probs >= threshold).long()
-
-            all_targets.extend(data.y.view(-1).cpu().numpy())
-            all_preds.extend(preds.cpu().numpy())
-            all_proba.extend(probs.cpu().numpy())
-
-    return all_targets, all_preds, all_proba
-
-
-def predict_graph(model,graph,device):
     null_batch = torch.zeros(graph.num_nodes, dtype=torch.long, device=device)
     graph.batch = null_batch
     model.eval()
