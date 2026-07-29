@@ -1,5 +1,6 @@
 import streamlit as st
 from PIL import Image
+
 LOGO_PATH = "logo.jpeg"  
 
 # --- Page Configuration ---
