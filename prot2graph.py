@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from torch_geometric.data import Data
 from numba import njit
 
-seed = 2025
+seed = 2026
 aminoacidi = 'ACDEFGHIKLMNPQRSTVWYX'
 
 AA_TO_INT = {aa: i for i, aa in enumerate(aminoacidi)}
@@ -266,3 +266,4 @@ def create_graph(sequence, esm_model, alphabet, n_layer, device, y, percentile=0
         subseqs = [sequence[start:end] for start, end in segments]
         return graph, subseqs
     return graph
+
