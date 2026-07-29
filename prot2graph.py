@@ -10,11 +10,11 @@ aminoacidi = 'ACDEFGHIKLMNPQRSTVWYX'
 AA_TO_INT = {aa: i for i, aa in enumerate(aminoacidi)}
 
 def encode_sequence(sequence):
+    """
+    Encode a protein sequence into a numerical representation.
+    """
     sequence = check_input(sequence)
     return np.array([AA_TO_INT[c] for c in sequence], dtype=np.int32)
-
-
-
 
 
 def check_input(sequence):
@@ -33,7 +33,18 @@ def check_input(sequence):
 
 @njit
 def segment_cost(seq, start, end):
-
+    """
+    Compute the cost of a segment of a sequence using the Minimum Description Length (MDL)
+    principle.
+    The cost is calculated based on the frequency of amino acids in the segment.
+    
+    Args:
+        seq (np.ndarray): The encoded sequence as a numpy array of integers.
+        start (int): The starting index of the segment (inclusive).
+        end (int): The ending index of the segment (exclusive).
+    Returns:
+        float: The cost of the segment.
+    """
     counts = np.zeros(21, dtype=np.int32)
 
     for i in range(start, end):
@@ -53,7 +64,15 @@ def segment_cost(seq, start, end):
 
 @njit
 def mdl_segmentation_numba(seq):
-
+    """
+    Perform Minimum Description Length (MDL) segmentation on a sequence.
+        
+    Args:
+        
+        seq (np.ndarray): The encoded sequence as a numpy array of integers.
+        Returns:
+        np.ndarray: An array of previous indices indicating the optimal segmentation.
+    """
     N = len(seq)
 
     lam = np.log(N)
@@ -157,7 +176,15 @@ def local_differences(E):
     return E 
 
 def mdl_segmentation(sequence):
+    """
+    Perform Minimum Description Length (MDL) segmentation on a sequence.
+    
+    Args:
+        sequence (str): The protein sequence to be segmented.
 
+    Returns:
+        list[tuple[int, int]]: A list of segments represented as tuples of start and end indices.
+    """
     seq = encode_sequence(sequence)
 
     prev = mdl_segmentation_numba(seq)
