@@ -2,37 +2,18 @@ import streamlit as st
 from PIL import Image
 from collections import Counter
 import pandas as pd
-
 import plotly.express as px
 import plotly.graph_objects as go
-
 import networkx as nx
-
-
 from utils import identify_device, load_model, load_model_from_file
 from prot2graph import create_graph
 from GraphTFactor import predict_graph
 
-
-
-# ==========================
-# Configuration
-# ==========================
-
 LOGO_PATH = "logo.jpeg"
 
 
-st.set_page_config(
-    page_title="GraphTFactor",
-    page_icon=LOGO_PATH,
-    layout="wide"
-)
+st.set_page_config(page_title="GraphTFactor",page_icon=LOGO_PATH,layout="wide")
 
-
-
-# ==========================
-# Custom CSS
-# ==========================
 
 st.markdown(
 """
@@ -110,59 +91,23 @@ unsafe_allow_html=True
 )
 
 
-
-# ==========================
-# Device
-# ==========================
-
 device,_ = identify_device()
 
 
 
-# ==========================
-# Cache
-# ==========================
-
-
 @st.cache_resource
 def cached_load_esm(esm_model,device):
-
-    model,alphabet = load_model(
-        esm_model,
-        device
-    )
-
+    model,alphabet = load_model(esm_model,device)
     return model,alphabet
 
 
 
 @st.cache_resource
-def cached_load_gnn(
-        organism,
-        esm_model,
-        in_channels,
-        device):
-
-
-    model = load_model_from_file(
-        organism,
-        esm_model,
-        in_channels,
-        device
-    )
-
+def cached_load_gnn(organism,esm_model,in_channels,device):
+    model = load_model_from_file(organism,esm_model,in_channels,device)
     return model
 
-
-
-# ==========================
-# Sidebar
-# ==========================
-
-
 with st.sidebar:
-
-
     try:
 
         logo=Image.open(LOGO_PATH)
