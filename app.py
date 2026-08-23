@@ -5,7 +5,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import networkx as nx
-from utils import identify_device, load_model, load_model_from_file
+from utils import identify_device, load_model, load_model_from_file,create_nx_graph
 from prot2graph import create_graph
 from GraphTFactor import predict_graph
 
@@ -109,19 +109,11 @@ def cached_load_gnn(organism,esm_model,in_channels,device):
 
 with st.sidebar:
     try:
-
         logo=Image.open(LOGO_PATH)
-
-        st.image(
-            logo,
-            width=220
-        )
+        st.image(logo,width=220)
 
     except:
-
-        st.warning(
-            "Logo not found"
-        )
+        st.warning("Logo not found")
 
 
 
@@ -160,16 +152,7 @@ with st.sidebar:
 
     )
 
-
-
-# ==========================
-# Header
-# ==========================
-
-
-st.title(
-    "🧬 GraphTFactor"
-)
+st.title("🧬 GraphTFactor")
 
 
 st.markdown(
@@ -180,15 +163,7 @@ st.markdown(
 
 
 
-# ==========================
-# Input
-# ==========================
-
-
-sequence = st.text_area(
-    "Paste protein sequence",
-    height=180
-)
+sequence = st.text_area( "Paste protein sequence", height=180)
 
 
 sequence = (
@@ -201,76 +176,25 @@ sequence = (
 )
 
 
-
-# ==========================
-# Validation
-# ==========================
-
-
 if sequence:
-
-
-    VALID_AA=set(
-        "ACDEFGHIKLMNPQRSTVWYXBZUO"
-    )
-
-
+    VALID_AA=set("ACDEFGHIKLMNPQRSTVWYXBZUO")
     invalid=set(sequence)-VALID_AA
-
-
     if invalid:
-
-        st.error(
-            f"Invalid residues: {invalid}"
-        )
-
+        st.error(f"Invalid residues: {invalid}")
         st.stop()
 
 
-
-    # ==========================
-    # Protein statistics
-    # ==========================
-
-
-    st.subheader(
-        "🧬 Protein information"
-    )
-
-
+    st.subheader("🧬 Protein information")
     aa=Counter(sequence)
-
-
     c1,c2,c3=st.columns(3)
 
 
-    c1.metric(
-        "Length",
-        f"{len(sequence)} aa"
-    )
+    c1.metric("Length",f"{len(sequence)} aa")
+    c2.metric("Unknown residues", aa.get("X",0))
+    c3.metric("Unique residues",len(aa))
 
 
-    c2.metric(
-        "Unknown residues",
-        aa.get("X",0)
-    )
-
-
-    c3.metric(
-        "Unique residues",
-        len(aa)
-    )
-
-
-
-    # ==========================
-    # Amino acid plot
-    # ==========================
-
-
-    st.markdown(
-        "### Amino acid composition"
-    )
+    st.markdown("### Amino acid composition")
 
 
     aa_df=pd.DataFrame(
@@ -282,100 +206,35 @@ if sequence:
     )
 
 
-    fig=px.bar(
-        aa_df,
-        x="Residue",
-        y="Count",
-        template="plotly_white"
-    )
+    fig=px.bar(aa_df,x="Residue",y="Count",template="plotly_white")
+    st.plotly_chart(fig,use_container_width=True)
 
 
-    st.plotly_chart(
-        fig,
-    )
-
-
-
-    # ==========================
-    # Settings
-    # ==========================
-
-
-    st.subheader(
-        "⚙️ Prediction settings"
-    )
+    st.subheader("⚙️ Prediction settings")
 
 
     col1,col2=st.columns(2)
 
 
     with col1:
-
-        esm_model=st.selectbox(
-            "ESM-2 model",
-            [
-                6,
-                12,
-                30
-            ]
-        )
+        esm_model=st.selectbox("ESM-2 model",[6,12,30])
 
 
     with col2:
+        organism=st.selectbox("Organism",["All","Virus","Eukaryotic","Prokaryotic"])
 
-
-        organism=st.selectbox(
-            "Organism",
-            [
-                "All",
-                "Virus",
-                "Eukaryotic",
-                "Prokaryotic"
-            ]
-        )
-
-
-
-    # ==========================
-    # Prediction
-    # ==========================
-
-
-    if st.button(
-        "🔍 Predict Transcription Factor"
-    ):
-
-
+    if st.button("🔍 Predict Transcription Factor"):
         progress=st.progress(0)
-
         status=st.empty()
-
-
+        
         try:
+            status.info("🧬 Loading ESM-2...")
 
-
-            # ESM
-
-            status.info(
-                "🧬 Loading ESM-2..."
-            )
-
-
-            esm,alphabet = cached_load_esm(
-                esm_model,
-                device
-            )
-
-
+            esm,alphabet = cached_load_esm(esm_model, device)
+            
             progress.progress(30)
 
-
-
-            # Graph
-
-            status.info(
-                "🕸️ Building protein graph..."
-            )
+            status.info("🕸️ Building protein graph...")
 
 
             graph=create_graph(
@@ -390,59 +249,18 @@ if sequence:
 
             progress.progress(55)
 
-
-
-            # Graph statistics
-
-
-            st.subheader(
-                "🕸️ Graph information"
-            )
-
+            st.subheader("🕸️ Graph information")
 
             g1,g2,g3=st.columns(3)
 
-
-            g1.metric(
-                "Nodes",
-                graph.num_nodes
-            )
+            g1.metric("Nodes",graph.num_nodes)
+            g2.metric("Edges",graph.num_edges)
+            g3.metric("Features",graph.num_node_features)
 
 
-            g2.metric(
-                "Edges",
-                graph.num_edges
-            )
-
-
-            g3.metric(
-                "Features",
-                graph.num_node_features
-            )
-
-
-
-            # Graph visualization
-
-            G=nx.Graph()
-
-
-            edges=graph.edge_index.cpu().numpy()
-
-
-            for i in range(edges.shape[1]):
-
-                G.add_edge(
-                    int(edges[0,i]),
-                    int(edges[1,i])
-                )
-
-
-
-            pos=nx.spring_layout(
-                G,
-                seed=42
-            )
+            
+            G = create_nx_graph(graph)
+            pos=nx.spring_layout(G,seed=42)
 
 
             edge_x=[]
@@ -514,21 +332,14 @@ if sequence:
             )
 
 
-            st.plotly_chart(
-                fig_graph,
-            )
+            st.plotly_chart(fig_graph,)
 
 
 
             progress.progress(75)
 
 
-
-            # GNN
-
-
-            status.info(
-                "🤖 Running GNN..."
+            status.info("🤖 Running GNN..."
             )
 
 

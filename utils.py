@@ -4,6 +4,7 @@ import streamlit as st
 import cpuinfo
 import esm 
 from GraphTFactor import GraphTFactor
+import networkx as nx
 
 dropout = 0.2
 
@@ -69,3 +70,11 @@ def load_model_from_file(org,esm_model,in_channels,device):
     net.load_state_dict(torch.load(path, map_location=device))
     net.eval()
     return net
+
+
+def create_nx_graph(graph):
+    G = nx.Graph()
+    edges = graph.edge_index.cpu().numpy()
+    for i in range(edges.shape[1]):
+        G.add_edge(int(edges[0, i]), int(edges[1, i]))
+    return G
