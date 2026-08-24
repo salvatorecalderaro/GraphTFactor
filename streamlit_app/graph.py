@@ -205,7 +205,7 @@ def mdl_segmentation(sequence):
 
 
 
-def create_graph(sequence, esm_model, alphabet, n_layer, device, percentile=0.7,return_segments=False):
+def create_graph(sequence, esm_model, alphabet, n_layer, device, y, percentile=0.7,return_segments=False):
     """
     Create a graph from a protein sequence using ESM embeddings.
 
@@ -281,10 +281,12 @@ def create_graph(sequence, esm_model, alphabet, n_layer, device, percentile=0.7,
                 edge_weight = sim[A == 1]
 
     # --- Step 10: construct PyG graph
+    y  = np.array([y], dtype=np.int64)
     graph = Data(
         x=E,
         edge_index=edge_index,
         edge_weight=edge_weight,
+        y=torch.tensor(y, dtype=torch.long)
     )
 
     if return_segments:

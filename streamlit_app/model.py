@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch_geometric.nn import SAGEConv, global_mean_pool, global_max_pool
+from torch_geometric.profile import timeit
+from tqdm import tqdm
 
 
 class GraphTFactor(nn.Module):
@@ -57,6 +59,50 @@ class GraphTFactor(nn.Module):
         
         x = torch.cat([x_max, x_mean], dim=1)  #
         return self.mlp(x).view(-1) 
+
+
+
+def train_net(device, net, trainloader, epochs, lr):
+    """
+    Train the GraphTFactor model.
+
+    Parameters:
+    - device (torch.device): The device to run the training on.
+    - net (GraphTFactor): The GraphTFactor model to be trained.
+    - trainloader (torch_geometric.data.DataLoader): The DataLoader for the training data.
+    - epochs (int): The number of training epochs.
+    - lr (float): The learning rate for the optimizer.
+
+    Returns:
+    - net (GraphTFactor): The trained GraphTFactor model.
+    - float: The training duration in seconds.
+    """
+    net.to(device)
+    optimizer = torch.optim.Adam(net.parameters(), lr=lr)
+    criterion = nn.BCEWithLogitsLoss() 
+
+    net.train()
+    tc = timeit()
+
+    with tc:
+        for epoch in tqdm(range(epochs), desc="Training"):
+            total_loss = 0.0
+
+            for data in trainloader:
+                data = data.to(device)
+                optimizer.zero_grad()
+                logits = net(data)
+                loss = criterion(logits, data.y.float())
+                loss.backward()
+                optimizer.step()
+
+                total_loss += loss.item() * data.num_graphs
+
+            avg_loss = total_loss / len(trainloader.dataset)
+            # print(f"Epoch {epoch+1:03d} | Loss: {avg_loss:.4f}")
+
+    print(f"Training time: {tc.duration:.2f} seconds")
+    return net, tc.duration
 
 
 def predict_graph(model,graph,device):

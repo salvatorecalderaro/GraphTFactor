@@ -5,9 +5,9 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import networkx as nx
-from graphtfactor.utils import identify_device, load_model, load_model_from_file,create_nx_graph
-from graphtfactor.graph import create_graph
-from graphtfactor.model import predict_graph
+from utils import identify_device, load_model, load_model_from_file,create_nx_graph
+from graph import create_graph
+from model import predict_graph
 from pathlib import Path
 
 LOGO_PATH = Path(__file__).parent / "assets" / "logo.jpeg"

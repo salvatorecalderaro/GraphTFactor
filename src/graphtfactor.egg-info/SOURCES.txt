@@ -1,0 +1,12 @@
+LICENSE
+README.md
+pyproject.toml
+src/graphtfactor/__init__.py
+src/graphtfactor/graph.py
+src/graphtfactor/graphtfactor.py
+src/graphtfactor/model.py
+src/graphtfactor/utils.py
+src/graphtfactor.egg-info/PKG-INFO
+src/graphtfactor.egg-info/SOURCES.txt
+src/graphtfactor.egg-info/dependency_links.txt
+src/graphtfactor.egg-info/top_level.txt
