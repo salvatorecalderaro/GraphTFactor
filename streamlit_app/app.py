@@ -5,13 +5,12 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import networkx as nx
-from utils import identify_device, load_model, load_model_from_file,create_nx_graph
-from prot2graph import create_graph
-from GraphTFactor import predict_graph
+from graphtfactor.utils import identify_device, load_model, load_model_from_file,create_nx_graph
+from graphtfactor.graph import create_graph
+from graphtfactor.model import predict_graph
+from pathlib import Path
 
-LOGO_PATH = "logo.jpeg"
-
-
+LOGO_PATH = Path(__file__).parent / "assets" / "logo.jpeg"
 st.set_page_config(page_title="GraphTFactor",page_icon=LOGO_PATH,layout="wide")
 
 
