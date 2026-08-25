@@ -40,13 +40,12 @@ class GraphTFactor:
         Returns:
             list of tuples: A list of predictions and probabilities for each sequence.
         """
-        graphs = []
-        for seq in seqs:
-            graph = create_graph(seq, self.esm_model, self.alphabet, self.esm_layers, self.device, percentile=0.7)
-            graphs.append(graph)
         
         predictions = []
-        for graph in tqdm(graphs, desc="Predicting", unit="graph"):
+        probas = []
+        for seq in tqdm(seqs, desc="Predicting", unit="seq"):
+            graph = create_graph(seq, self.esm_model, self.alphabet, self.esm_layers, self.device, percentile=0.7)
             pred,prob = predict_graph(self.gnn_model,graph,self.device)
-            predictions.append((pred,prob))
-        return predictions
+            predictions.append(pred)
+            probas.append(prob) 
+        return predictions, probas
