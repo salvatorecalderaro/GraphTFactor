@@ -5,7 +5,18 @@ from graphtfactor.model import predict_graph
 from tqdm import tqdm
 
 class GraphTFactor:
+    """
+    GraphTFactor class for predicting protein function using graph neural networks and ESM embeddings.
+    """
     def __init__(self,device,esm_layers,org):
+        """
+        Initializes the GraphTFactor class.
+
+        Args:
+            device (str): The device to run the models on.
+            esm_layers (int): The number of ESM layers to use.
+            org (str): The organism type.
+        """
         self.device = device
         self.org = org
         self.esm_layers = esm_layers
@@ -20,6 +31,15 @@ class GraphTFactor:
     
     
     def predict(self,seqs):
+        """
+        Predicts the function of protein sequences.
+
+        Args:
+            seqs (list of str): A list of protein sequences.
+
+        Returns:
+            list of tuples: A list of predictions and probabilities for each sequence.
+        """
         graphs = []
         for seq in seqs:
             graph = create_graph(seq, self.esm_model, self.alphabet, self.esm_layers, self.device, percentile=0.7)
