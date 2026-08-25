@@ -58,5 +58,3 @@ def load_model_from_file(org,esm_model,in_channels,device):
     net.load_state_dict(torch.load(path, map_location=device))
     net.eval()
     return net
-
-

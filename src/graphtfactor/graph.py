@@ -291,4 +291,3 @@ def create_graph(sequence, esm_model, alphabet, n_layer, device, percentile=0.7,
         subseqs = [sequence[start:end] for start, end in segments]
         return graph, subseqs
     return graph
-
