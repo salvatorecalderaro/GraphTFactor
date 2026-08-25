@@ -14,11 +14,7 @@ else:
 print(f"Using device: {device}")
 
 
-# Label mapping
-mapping = {
-    "no-tf": 0,
-    "tf": 1
-}
+mapping = {"no-tf": 0, "tf": 1}
 
 fasta_path = "Virus.fasta"
 
@@ -26,7 +22,6 @@ seqs = []
 true_labels = []
 ids = []
 
-# Read FASTA
 with open(fasta_path, "r") as fasta_file:
     for record in tqdm(
         SeqIO.parse(fasta_file, "fasta"),
@@ -44,35 +39,15 @@ with open(fasta_path, "r") as fasta_file:
 
 print(f"Total sequences read: {len(seqs)}")
 
+graphtf = GraphTFactor(device=device,esm_layers=6,org="Virus")
 
-
-
-# Load model
-graphtf = GraphTFactor(
-    device=device,
-    esm_layers=6,
-    org="Virus"
-)
-
-# Prediction
 predictions, probas = graphtf.predict(seqs)
+label_names = {0: "no-tf",1: "tf"}
 
+predicted_labels = [label_names[int(pred)] for pred in predictions]
 
-# Create readable labels
-label_names = {
-    0: "no-tf",
-    1: "tf"
-}
+true_label_names = [label_names[int(label)] for label in true_labels]
 
-predicted_labels = [
-    label_names[int(pred)] for pred in predictions
-]
-
-true_label_names = [
-    label_names[int(label)] for label in true_labels
-]
-
-# Results table
 results = pd.DataFrame({
     "ID": ids,
     "True": true_label_names,
