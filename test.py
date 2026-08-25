@@ -23,11 +23,7 @@ true_labels = []
 ids = []
 
 with open(fasta_path, "r") as fasta_file:
-    for record in tqdm(
-        SeqIO.parse(fasta_file, "fasta"),
-        desc="Reading FASTA",
-        unit="sequence"
-    ):
+    for record in tqdm(SeqIO.parse(fasta_file, "fasta"),desc="Reading FASTA",unit="sequence"):
         info = record.description.split(" ")
 
         seq_id = info[0]
