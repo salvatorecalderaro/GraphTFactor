@@ -1,0 +1,22 @@
+Accuracy:
+  Mean: 0.9903807588809276
+  Standard Deviation: 0.0014428563878288534
+Balanced Accuracy:
+  Mean: 0.9845126293841551
+  Standard Deviation: 0.0034676412860549584
+Device: NVIDIA RTX 6000 Ada Generation
+F1 Score:
+  Mean: 0.9805960761468082
+  Standard Deviation: 0.002994648038603634
+ROC AUC:
+  Mean: 0.9953996386625805
+  Standard Deviation: 0.0012935336763349034
+Sensitivity:
+  Mean: 0.9727758269257935
+  Standard Deviation: 0.007936217686672803
+Specificity:
+  Mean: 0.9962494318425165
+  Standard Deviation: 0.0015763392798106926
+Training Time:
+  Mean: 230.10673367977142
+  Standard Deviation: 1.209153150520475
