@@ -13,7 +13,7 @@
   <a href="https://pypi.org/">PyPI</a> •
   <a href="#streamlit-demo">Streamlit Demo</a> •
   <a href="#python-package">Python Package</a> •
-  <a href="#citation">Citation</a>
+  <a href="#citation">Citation</a> 
 </p>
 ---
 
@@ -184,7 +184,7 @@ graphtf = GraphTFactor(device=device,esm_layers=6,org="Virus")
 
 
 seq = ["MDQYITLVELYIYDCNLFKSKNLKSFYKVHRVPEGDIVPKRRGGQLAGVTKSWVETNLVH"]
-prediction,prob = model.predict(seq)
+prediction,prob = graphtf.predict(seq)
 
 print(prediction,prob)
 ```
