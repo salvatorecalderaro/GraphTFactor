@@ -151,11 +151,8 @@ elif torch.backends.mps.is_available():
 else:
     device = "cpu"
 
-model = GraphTFactor(
-    device=device,
-    esm_layers=30,
-    org="virus"
-)
+graphtf = GraphTFactor(device=device,esm_layers=6,org="Virus")
+
 
 seq = ["MDQYITLVELYIYDCNLFKSKNLKSFYKVHRVPEGDIVPKRRGGQLAGVTKSWVETNLVH"]
 prediction,prob = model.predict(seq)
