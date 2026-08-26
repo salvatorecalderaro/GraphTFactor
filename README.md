@@ -9,6 +9,7 @@
 </p>
 
 <p align="center">
+  <a href="https://pypi.org/">Paper</a> •
   <a href="https://pypi.org/">PyPI</a> •
   <a href="#streamlit-demo">Streamlit Demo</a> •
   <a href="#python-package">Python Package</a> •
@@ -309,11 +310,9 @@ For research or collaboration inquiries, please contact:
 
 📧 Email: `salvatore.calderaro01@unipa.it`
 
-
 <p align="center">
   <strong>GraphTFactor</strong><br>
   GraphTFactor: Modeling Protein Sequences as Graphs for Accurate Transcription Factor Prediction.
 </p>
 
 ---
-
