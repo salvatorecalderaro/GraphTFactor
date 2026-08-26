@@ -196,6 +196,7 @@ CUDA → NVIDIA GPU
 MPS  → Apple Silicon GPU
 CPU  → CPU fallback
 ```
+
 ---
 
 ## FASTA Example
@@ -304,3 +305,13 @@ We acknowledge the developers and research groups behind these projects.
   <strong>GraphTFactor</strong><br>
   GraphTFactor: Modeling Protein Sequences as Graphs for Accurate Transcription Factor Prediction.
 </p>
+
+---
+
+# Contact
+
+For questions, feedback, bug reports, or collaboration inquiries, please open an issue in the [GitHub repository](https://github.com/salvatorecalderaro/GraphTFactor).
+
+For research or collaboration inquiries, please contact:
+
+📧 Email: `salvatore.calderaro01@unipa.it`
