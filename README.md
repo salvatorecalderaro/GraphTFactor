@@ -144,9 +144,12 @@ A minimal example is:
 import torch
 from graphtfactor import GraphTFactor
 
-device = "cuda" if torch.cuda.is_available() else (
-    "mps" if torch.backends.mps.is_available() else "cpu"
-)
+if torch.cuda.is_available():
+    device = "cuda"
+elif torch.backends.mps.is_available():
+    device = "mps"
+else:
+    device = "cpu"
 
 model = GraphTFactor(
     device=device,
@@ -154,12 +157,13 @@ model = GraphTFactor(
     org="virus"
 )
 
-prediction = model.predict("protein.fasta")
+seq = ["MDQYITLVELYIYDCNLFKSKNLKSFYKVHRVPEGDIVPKRRGGQLAGVTKSWVETNLVH"]
+prediction,prob = model.predict(seq)
 
-print(prediction)
+print(prediction,prob)
 ```
 
-GraphTFactor automatically selects the available computational backend:
+Available computational backend:
 
 ```text
 CUDA → NVIDIA GPU
@@ -174,17 +178,70 @@ CPU  → CPU fallback
 GraphTFactor can be used directly with protein sequences stored in FASTA format:
 
 ```python
+import torch
+import pandas as pd
 from graphtfactor import GraphTFactor
+from Bio import SeqIO
+from tqdm import tqdm
 
-model = GraphTFactor(
-    device="cuda",
-    esm_layers=30,
-    org="virus"
-)
+if torch.cuda.is_available():
+    device = "cuda"
+elif torch.backends.mps.is_available():
+    device = "mps"
+else:
+    device = "cpu"
 
-results = model.predict("Virus.fasta")
+print(f"Using device: {device}")
 
-print(results)
+
+mapping = {"no-tf": 0, "tf": 1}
+
+fasta_path = "Virus.fasta"
+
+seqs = []
+true_labels = []
+ids = []
+
+with open(fasta_path, "r") as fasta_file:
+    for record in tqdm(SeqIO.parse(fasta_file, "fasta"),desc="Reading FASTA",unit="sequence"):
+        info = record.description.split(" ")
+
+        seq_id = info[0]
+        label = info[1]
+
+        seqs.append(str(record.seq))
+        true_labels.append(mapping[label])
+        ids.append(seq_id)
+
+print(f"Total sequences read: {len(seqs)}")
+
+graphtf = GraphTFactor(device=device,esm_layers=6,org="Virus")
+
+predictions, probas = graphtf.predict(seqs)
+label_names = {0: "no-tf",1: "tf"}
+
+predicted_labels = [label_names[int(pred)] for pred in predictions]
+
+true_label_names = [label_names[int(label)] for label in true_labels]
+
+results = pd.DataFrame({
+    "ID": ids,
+    "True": true_label_names,
+    "Predicted": predicted_labels,
+    "Probability": probas
+})
+
+results["Correct"] = results["True"] == results["Predicted"]
+
+print("\n" + "=" * 70)
+print("GraphTFactor Prediction Results")
+print("=" * 70)
+
+print(results.to_string(index=False))
+
+print("=" * 70)
+
+
 ```
 
 For batch analysis, a FASTA file containing multiple protein sequences can be supplied to the same workflow.
