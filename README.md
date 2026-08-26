@@ -35,15 +35,20 @@ The GraphTFactor pipeline can be summarized as:
 
 More specifically:
 
+
 1. **Protein sequence input**
 
-   GraphTFactor accepts protein sequences in standard FASTA format.
+   GraphTFactor accepts protein sequences in standard FASTA or string formats.
 
 2. **Sequence segmentation**
 
    The sequence is segmented into informative subsequences using a data-driven segmentation strategy.
 
-3. **De Bruijn graph construction**
+3. **ESM-2 embeddings**
+    
+    The sequen
+
+3. **Graph construction**
 
    The resulting segments are used to construct a graph representation of the protein.
 
