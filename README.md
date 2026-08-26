@@ -103,23 +103,6 @@ Run GraphTFactor
 Prediction
 ```
 
-### Run the demo locally
-
-After installing GraphTFactor, launch the Streamlit application with:
-
-```bash
-streamlit run app.py
-```
-
-The application allows users to:
-
-- upload a FASTA file;
-- select the protein embedding model;
-- select the target organism/domain;
-- choose the available computational device;
-- run GraphTFactor inference;
-- inspect the prediction results.
-
 ### Demo
 
 <p align="center">
@@ -211,27 +194,6 @@ For batch analysis, a FASTA file containing multiple protein sequences can be su
 # Citation
 
 If you use **GraphTFactor** in your research, please cite:
-
-```bibtex
-@article{calderaro2026graphtfactor,
-  title     = {GraphTFactor: Graph-based protein function prediction using De Bruijn graphs},
-  author    = {Calderaro, Salvatore},
-  year      = {2026},
-  journal   = {TBD},
-  doi       = {TBD}
-}
-```
-
-If the associated paper is not yet published, please cite the GitHub repository:
-
-```bibtex
-@software{graphtfactor,
-  author  = {Calderaro, Salvatore},
-  title   = {GraphTFactor},
-  year    = {2026},
-  url     = {https://github.com/YOUR_USERNAME/GraphTFactor}
-}
-```
 
 ---
 
