@@ -1,7 +1,7 @@
 # GraphTFactor
 
 <p align="center">
-  <img src="images/logo.jpeg" alt="GraphTFactor Logo" width="180"/>
+  <img src="images/logo.jpeg" alt="GraphTFactor Logo" width="280"/>
 </p>
 
 <p align="center">
@@ -30,7 +30,7 @@ The resulting graph is processed by a **Graph Neural Network (GNN)** to learn st
 The GraphTFactor pipeline can be summarized as:
 
 <p align="center">
-  <img src="images/pipeline.png" alt="GraphTFactor Pipeline" width="180"/>
+  <img src="images/pipeline.png" alt="GraphTFactor Pipeline"/>
 </p>
 
 More specifically:
