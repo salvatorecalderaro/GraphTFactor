@@ -196,7 +196,6 @@ CUDA → NVIDIA GPU
 MPS  → Apple Silicon GPU
 CPU  → CPU fallback
 ```
-
 ---
 
 ## FASTA Example
