@@ -91,10 +91,10 @@ The interface provides a simple workflow:
 Upload FASTA
      │
      ▼
-Select model (the esm model to use for emb)
+Select organism
      │
      ▼
-Select organism (the org All, Euuk,)
+Select model
      │
      ▼
 Run GraphTFactor
