@@ -35,7 +35,6 @@ The GraphTFactor pipeline can be summarized as:
 
 More specifically:
 
-
 1. **Protein sequence input**
 
    GraphTFactor accepts protein sequences in standard FASTA or string formats.
@@ -45,22 +44,22 @@ More specifically:
    The sequence is segmented into informative subsequences using a data-driven segmentation strategy.
 
 3. **ESM-2 embeddings**
-    
-    The sequen
 
-3. **Graph construction**
+   The sequen
+
+4. **Graph construction**
 
    The resulting segments are used to construct a graph representation of the protein.
 
-4. **Node representation**
+5. **Node representation**
 
    Each graph node is associated with a learned or pretrained protein representation.
 
-5. **Graph Neural Network**
+6. **Graph Neural Network**
 
    The graph is processed using graph convolution/message-passing layers to capture relationships between sequence segments.
 
-6. **Prediction**
+7. **Prediction**
 
    The learned graph representation is passed to a classifier to obtain the final protein function prediction.
 
@@ -71,7 +70,7 @@ This representation allows GraphTFactor to combine **sequence information, local
 ## Key Features
 
 - 🧬 Protein sequence analysis from FASTA files
-- 🕸️ De Bruijn graph representation of protein sequences
+- 🕸️ Graph representation of protein sequences based on MDL segmentation and ESM-2 embeddings
 - 🧠 Graph Neural Network-based prediction
 - 🔬 Support for pretrained protein embeddings
 - ⚡ GPU acceleration with PyTorch
@@ -109,12 +108,12 @@ GraphTFactor allows users to select the organism category corresponding to the p
 
 The available options are:
 
-| Organism | Description |
-|----------|-------------|
-| `All` | General-purpose model trained across all available organism categories |
-| `Virus` | Model configuration for viral proteins |
-| `Eukaryotic` | Model configuration for eukaryotic proteins |
-| `Prokaryotic` | Model configuration for prokaryotic proteins |
+| Organism      | Description                                                            |
+| ------------- | ---------------------------------------------------------------------- |
+| `All`         | General-purpose model trained across all available organism categories |
+| `Virus`       | Model configuration for viral proteins                                 |
+| `Eukaryotic`  | Model configuration for eukaryotic proteins                            |
+| `Prokaryotic` | Model configuration for prokaryotic proteins                           |
 
 The selected organism determines the corresponding model configuration used for prediction.
 
@@ -124,15 +123,14 @@ GraphTFactor supports multiple **ESM-2 models** for generating protein segment e
 
 The **ESM-2** model is identified by its number of transformer layers. The selected model is used to generate the embeddings of the protein segments obtained through the MDL-based segmentation step.
 
-| ESM-2 #Layers | ESM-2 Model | Parameters | Embedding Dimension |
-|-------------|-------------|------------|---------------------|
-| 6 | `esm2_t6_8M_UR50D` | 8M | 320 |
-| 12 | `esm2_t12_35M_UR50D` | 35M | 480 |
-| 30 | `esm2_t30_150M_UR50D` | 150M | 640 |
-| 33 | `esm2_t33_650M_UR50D` | 650M | 1280 |
-| 36 | `esm2_t36_3B_UR50D` | 3B | 2560 |
-| 48 | `esm2_t48_15B_UR50D` | 15B | 5120 |
-
+| ESM-2 #Layers | ESM-2 Model           | Parameters | Embedding Dimension |
+| ------------- | --------------------- | ---------- | ------------------- |
+| 6             | `esm2_t6_8M_UR50D`    | 8M         | 320                 |
+| 12            | `esm2_t12_35M_UR50D`  | 35M        | 480                 |
+| 30            | `esm2_t30_150M_UR50D` | 150M       | 640                 |
+| 33            | `esm2_t33_650M_UR50D` | 650M       | 1280                |
+| 36            | `esm2_t36_3B_UR50D`   | 3B         | 2560                |
+| 48            | `esm2_t48_15B_UR50D`  | 15B        | 5120                |
 
 ### Demo
 
@@ -272,8 +270,6 @@ print("=" * 70)
 
 ```
 
-For batch analysis, a FASTA file containing multiple protein sequences can be supplied to the same workflow.
-
 ---
 
 # Citation
@@ -307,5 +303,5 @@ We acknowledge the developers and research groups behind these projects.
 
 <p align="center">
   <strong>GraphTFactor</strong><br>
-  Graph representations for protein function prediction.
+  GraphTFactor: Modeling Protein Sequences as Graphs for Accurate Transcription Factor Prediction.
 </p>
