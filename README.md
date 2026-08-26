@@ -45,7 +45,7 @@ More specifically:
 
 3. **ESM-2 embeddings**
 
-   The sequen
+   The subsequences are represented trough ESM-2 embeddings.
 
 4. **Graph construction**
 
