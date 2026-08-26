@@ -1,11 +1,11 @@
 # GraphTFactor
 
 <p align="center">
-  <img src="logo.png" alt="GraphTFactor Logo" width="180"/>
+  <img src="images/logo.jpeg" alt="GraphTFactor Logo" width="180"/>
 </p>
 
 <p align="center">
-  <strong>Graph-based protein function prediction using De Bruijn graphs and deep learning.</strong>
+  <strong>GraphTFactor: Modeling Protein Sequences as Graphs for Accurate Transcription Factor Prediction.</strong>
 </p>
 
 <p align="center">
@@ -21,7 +21,7 @@
 
 **GraphTFactor** is a deep-learning framework for protein function prediction based on a graph representation of protein sequences.
 
-Instead of processing a protein sequence only as a conventional string, GraphTFactor converts the sequence into a **De Bruijn graph**, where sequence segments are represented as graph nodes and their relationships are encoded by graph connectivity.
+Instead of processing a protein sequence only as a conventional string, GraphTFactor converts it into a graph representation. Protein sequences are segmented using a **Minimum Description Length** (MDL) approach, while **ESM embeddings** and sequence similarity are used to represent and characterize the resulting segments.
 
 The resulting graph is processed by a **Graph Neural Network (GNN)** to learn structural representations of the protein and predict its functional class.
 
@@ -29,24 +29,9 @@ The resulting graph is processed by a **Graph Neural Network (GNN)** to learn st
 
 The GraphTFactor pipeline can be summarized as:
 
-```text
-Protein sequence
-       │
-       ▼
-Sequence segmentation
-       │
-       ▼
-De Bruijn graph construction
-       │
-       ▼
-Graph representation
-       │
-       ▼
-Graph Neural Network
-       │
-       ▼
-Protein function prediction
-```
+<p align="center">
+  <img src="images/pipeline.png" alt="GraphTFactor Pipeline" width="180"/>
+</p>
 
 More specifically:
 
