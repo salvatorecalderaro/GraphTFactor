@@ -306,7 +306,7 @@ For questions, feedback, bug reports, or collaboration inquiries, please open an
 
 For research or collaboration inquiries, please contact:
 
-📧 Email: `salvatore.calderaro01@unipa.it`
+📧 [salvatore.calderaro01@unipa.it](mailto:salvatore.calderaro01@unipa.it)
 
 <p align="center">
   <strong>GraphTFactor</strong><br>
