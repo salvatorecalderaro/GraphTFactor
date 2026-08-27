@@ -15,7 +15,6 @@
   <a href="#python-package">Python Package</a> •
   <a href="#citation">Citation</a> 
 </p>
----
 
 ## Introduction
 
