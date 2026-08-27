@@ -4,3 +4,4 @@ src/graphtfactor/__pycache__/graph.cpython-311.pyc
 src/graphtfactor/__pycache__/graphtfactor.cpython-311.pyc
 src/graphtfactor/__pycache__/model.cpython-311.pyc
 src/graphtfactor/__pycache__/utils.cpython-311.pyc
+streamlit_app/__pycache__/graph.cpython-311.pyc

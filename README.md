@@ -134,7 +134,7 @@ The **ESM-2** model is identified by its number of transformer layers. The selec
 ### Demo
 
 <p align="center">
-  <img src="docs/streamlit_demo.png" alt="GraphTFactor Streamlit Demo" width="850"/>
+  <img src="images/webappp_demo.png" alt="GraphTFactor Streamlit Demo" width="850"/>
 </p>
 
 > **Try GraphTFactor interactively:**  
