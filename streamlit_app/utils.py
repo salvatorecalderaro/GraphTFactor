@@ -5,7 +5,7 @@ import cpuinfo
 import esm 
 from model import GraphTFactor
 import networkx as nx
-
+from pathlib import Path
 dropout = 0.2
 
 def identify_device():
@@ -66,7 +66,7 @@ def load_model_from_file(org,esm_model,in_channels,device):
     
     net = GraphTFactor(in_channels=in_channels, dropout=dropout)
     net = net.to(device)
-    path=f"checkpoints/{org}/GraphTF_{esm_model}.pth"
+    path = f"checkpoints/{org}/GraphTF_{esm_model}.pth"
     net.load_state_dict(torch.load(path, map_location=device))
     net.eval()
     return net

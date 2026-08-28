@@ -2,6 +2,9 @@ import esm
 from graphtfactor.model import GraphTFactor
 import torch
 
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent
 
 def load_esm_model(device, n_layers):
     """
@@ -54,7 +57,7 @@ def load_model_from_file(org,esm_model,in_channels,device):
     
     net = GraphTFactor(in_channels=in_channels, dropout=0.2)
     net = net.to(device)
-    path=f"checkpoints/{org}/GraphTF_{esm_model}.pth"
+    path = (PROJECT_ROOT  / "checkpoints" / org / f"GraphTF_{esm_model}.pth")
     net.load_state_dict(torch.load(path, map_location=device))
     net.eval()
     return net
