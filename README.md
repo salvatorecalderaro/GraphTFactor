@@ -1,7 +1,7 @@
 # GraphTFactor
 
 <p align="center">
-  <img src="images/logo_transparente.png" alt="GraphTFactor Logo" width="280"/>
+  <img src="images/logo.png" alt="GraphTFactor Logo" width="280"/>
 </p>
 
 <p align="center">
