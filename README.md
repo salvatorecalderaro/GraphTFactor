@@ -1,7 +1,7 @@
 # GraphTFactor
 
 <p align="center">
-  <img src="images/logo.png" alt="GraphTFactor Logo" width="280"/>
+  <img src="images/logo_transparente.png" alt="GraphTFactor Logo" width="280"/>
 </p>
 
 <p align="center">
@@ -82,6 +82,8 @@ This representation allows GraphTFactor to combine **sequence information, local
 # Streamlit Demo
 
 GraphTFactor includes an interactive **Streamlit web application** that allows users to run predictions without writing Python code.
+
+Note that for the Streamlit webapp, for compuational problem the obly model are 6 12 30
 
 The interface provides a simple workflow:
 
