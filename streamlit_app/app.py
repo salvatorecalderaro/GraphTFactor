@@ -10,7 +10,7 @@ from graph import create_graph
 from model import predict_graph
 from pathlib import Path
 
-LOGO_PATH = Path(__file__).parent / "assets" / "logo.jpeg"
+LOGO_PATH = Path(__file__).parent / "assets" / "logo.png"
 st.set_page_config(page_title="GraphTFactor",page_icon=LOGO_PATH,layout="wide")
 
 
