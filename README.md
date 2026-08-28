@@ -83,7 +83,7 @@ This representation allows GraphTFactor to combine **sequence information, local
 
 GraphTFactor includes an interactive **Streamlit web application** that allows users to run predictions without writing Python code.
 
-Note that for the Streamlit webapp, for compuational problem the obly model are 6 12 30
+Note: Due to computational constraints, the Streamlit web application currently supports only models with 6, 12, and 30 layers.
 
 The interface provides a simple workflow:
 
