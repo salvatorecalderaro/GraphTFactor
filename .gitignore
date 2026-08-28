@@ -7,3 +7,5 @@ src/graphtfactor/__pycache__/utils.cpython-311.pyc
 streamlit_app/__pycache__/graph.cpython-311.pyc
 streamlit_app/__pycache__/utils.cpython-311.pyc
 streamlit_app/__pycache__/utils.cpython-311.pyc
+streamlit_app/__pycache__/graph.cpython-311.pyc
+.gitignore
