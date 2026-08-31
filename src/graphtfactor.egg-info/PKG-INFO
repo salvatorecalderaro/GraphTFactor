@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: graphtfactor
 Version: 0.1.0
-Summary: Graph neural network framework for protein transcription factor prediction
+Summary: GraphTFactor: Modeling Protein Sequences as Graphs for Accurate Transcription Factor Prediction
 License: MIT License
         
         Copyright (c) 2026 Salvatore Calderaro
@@ -32,7 +32,7 @@ Dynamic: license-file
 # GraphTFactor
 
 <p align="center">
-  <img src="images/logo.jpeg" alt="GraphTFactor Logo" width="280"/>
+  <img src="images/logo.png" alt="GraphTFactor Logo" width="280"/>
 </p>
 
 <p align="center">
@@ -113,6 +113,8 @@ This representation allows GraphTFactor to combine **sequence information, local
 # Streamlit Demo
 
 GraphTFactor includes an interactive **Streamlit web application** that allows users to run predictions without writing Python code.
+
+Note: Due to computational constraints, the Streamlit web application currently supports only models with 6, 12, and 30 layers.
 
 The interface provides a simple workflow:
 
