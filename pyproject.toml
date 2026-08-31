@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "graphtfactor"
 version = "0.1.0"
-description = "Graph neural network framework for protein transcription factor prediction"
+description = "GraphTFactor: Modeling Protein Sequences as Graphs for Accurate Transcription Factor Prediction"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
