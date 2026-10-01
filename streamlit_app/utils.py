@@ -1,6 +1,5 @@
 import platform
 import torch
-import streamlit as st
 import cpuinfo
 import esm 
 from model import GraphTFactor
@@ -28,7 +27,6 @@ def identify_device():
             dev_name = cpuinfo.get_cpu_info()["brand_raw"]
     return device, dev_name
 
-@st.cache_resource
 def load_model(n_layers, device):
     """
     Load an ESM model.

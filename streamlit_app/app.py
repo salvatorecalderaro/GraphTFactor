@@ -1,13 +1,13 @@
 import streamlit as st
 from PIL import Image
 from collections import Counter
+import json
+import subprocess
+import sys
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import networkx as nx
-from utils import identify_device, load_model, load_model_from_file,create_nx_graph
-from graph import create_graph
-from model import predict_graph
 from pathlib import Path
 
 LOGO_PATH = Path(__file__).parent / "assets" / "logo.png"
@@ -89,22 +89,6 @@ color:#444;
 unsafe_allow_html=True
 )
 
-
-device,_ = identify_device()
-
-
-
-@st.cache_resource
-def cached_load_esm(esm_model,device):
-    model,alphabet = load_model(esm_model,device)
-    return model,alphabet
-
-
-
-@st.cache_resource
-def cached_load_gnn(organism,esm_model,in_channels,device):
-    model = load_model_from_file(organism,esm_model,in_channels,device)
-    return model
 
 with st.sidebar:
     try:
@@ -206,7 +190,7 @@ if sequence:
 
 
     fig=px.bar(aa_df,x="Residue",y="Count",template="plotly_white")
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,width="stretch")
 
 
     st.subheader("⚙️ Prediction settings")
@@ -223,234 +207,102 @@ if sequence:
         organism=st.selectbox("Organism",["All","Virus","Eukaryotic","Prokaryotic"])
 
     if st.button("🔍 Predict Transcription Factor"):
-        progress=st.progress(0)
-        status=st.empty()
-        
+        progress = st.progress(5)
+        status = st.empty()
+
         try:
-            status.info("🧬 Loading ESM-2...")
-
-            esm,alphabet = cached_load_esm(esm_model, device)
-            
-            progress.progress(30)
-
-            status.info("🕸️ Building protein graph...")
-
-
-            graph=create_graph(
-                sequence,
-                esm,
-                alphabet,
-                esm_model,
-                device=device,
-                y=0
+            status.info("🧬 Loading ESM-2 and predicting on MPS...")
+            worker = Path(__file__).parent / "predict_worker.py"
+            completed = subprocess.run(
+                [sys.executable, str(worker), sequence, str(esm_model), organism],
+                cwd=Path(__file__).parent,
+                capture_output=True,
+                text=True,
             )
 
-
-            progress.progress(55)
-
-            st.subheader("🕸️ Graph information")
-
-            g1,g2,g3=st.columns(3)
-
-            g1.metric("Nodes",graph.num_nodes)
-            g2.metric("Edges",graph.num_edges)
-            g3.metric("Features",graph.num_node_features)
-
-
-            
-            G = create_nx_graph(graph)
-            pos=nx.spring_layout(G,seed=42)
-
-
-            edge_x=[]
-            edge_y=[]
-
-
-            for e in G.edges():
-
-                x0,y0=pos[e[0]]
-                x1,y1=pos[e[1]]
-
-
-                edge_x += [
-                    x0,
-                    x1,
-                    None
-                ]
-
-                edge_y += [
-                    y0,
-                    y1,
-                    None
-                ]
-
-
-
-            node_x=[]
-            node_y=[]
-
-
-            for n in G.nodes():
-
-                x,y=pos[n]
-
-                node_x.append(x)
-                node_y.append(y)
-
-
-
-            fig_graph=go.Figure()
-
-
-            fig_graph.add_trace(
-                go.Scatter(
-                    x=edge_x,
-                    y=edge_y,
-                    mode="lines"
+            if completed.returncode != 0:
+                details = (completed.stderr or completed.stdout).strip()
+                raise RuntimeError(
+                    f"Prediction worker exited with code {completed.returncode}. "
+                    f"{details[-2500:]}"
                 )
+
+            result_line = next(
+                (line for line in reversed(completed.stdout.splitlines())
+                 if line.startswith("RESULT_JSON:")),
+                None,
             )
+            if result_line is None:
+                raise RuntimeError("Prediction worker returned no result.")
 
+            result = json.loads(result_line.removeprefix("RESULT_JSON:"))
+            progress.progress(65)
+            status.info("🕸️ Preparing graph visualization...")
 
-            fig_graph.add_trace(
-                go.Scatter(
-                    x=node_x,
-                    y=node_y,
-                    mode="markers",
-                    marker=dict(
-                        size=8
-                    )
-                )
-            )
+            graph_data = result["graph"]
+            G = nx.Graph()
+            G.add_nodes_from(range(graph_data["nodes"]))
+            G.add_edges_from(map(tuple, graph_data["edges"]))
+            pos = nx.spring_layout(G, seed=42)
 
+            edge_x, edge_y = [], []
+            for source, target in G.edges():
+                x0, y0 = pos[source]
+                x1, y1 = pos[target]
+                edge_x.extend([x0, x1, None])
+                edge_y.extend([y0, y1, None])
 
+            node_x = [pos[node][0] for node in G.nodes()]
+            node_y = [pos[node][1] for node in G.nodes()]
+
+            g1, g2, g3 = st.columns(3)
+            g1.metric("Nodes", graph_data["nodes"])
+            g2.metric("Edges", graph_data["edge_count"])
+            g3.metric("Features", graph_data["features"])
+
+            fig_graph = go.Figure()
+            fig_graph.add_trace(go.Scatter(x=edge_x, y=edge_y, mode="lines"))
+            fig_graph.add_trace(go.Scatter(
+                x=node_x, y=node_y, mode="markers", marker=dict(size=8)
+            ))
             fig_graph.update_layout(
-                title="Protein graph",
-                template="plotly_white",
-                height=500,
-                showlegend=False
+                title="Protein graph", template="plotly_white", height=500,
+                showlegend=False,
+            )
+            st.plotly_chart(fig_graph)
+
+            progress.progress(85)
+            prediction = result["prediction"]
+            proba = result["probability"]
+            confidence = proba if prediction == 1 else 1 - proba
+            status.success("Prediction completed")
+
+            if prediction == 1:
+                label = "✅ Transcription Factor"
+                css_class = "tf"
+            else:
+                label = "🚩 Non Transcription Factor"
+                css_class = "nontf"
+
+            st.markdown(
+                f"""
+                <div class="card">
+                <div class="{css_class}">{label}</div>
+                Confidence: {confidence * 100:.2f} %
+                </div>
+                """,
+                unsafe_allow_html=True,
             )
 
-
-            st.plotly_chart(fig_graph,)
-
-
-
-            progress.progress(75)
-
-
-            status.info("🤖 Running GNN..."
-            )
-
-
-            gnn=cached_load_gnn(
-                organism,
-                esm_model,
-                graph.num_node_features,
-                device
-            )
-
-
-            prediction,proba=predict_graph(
-                gnn,
-                graph,
-                device
-            )
-
-
+            fig_conf = go.Figure(go.Indicator(
+                mode="gauge+number",
+                value=confidence * 100,
+                title={"text": "Prediction confidence (%)"},
+                gauge={"axis": {"range": [0, 100]}},
+            ))
+            fig_conf.update_layout(height=300)
+            st.plotly_chart(fig_conf)
             progress.progress(100)
 
-
-            status.success(
-                "Prediction completed"
-            )
-
-
-
-            # ==========================
-            # Result
-            # ==========================
-
-
-            if prediction==1:
-
-                confidence=proba
-
-
-                st.markdown(
-                f"""
-                <div class="card">
-
-                <div class="tf">
-                ✅ Transcription Factor
-                </div>
-
-                Confidence:
-                {confidence*100:.2f} %
-
-                </div>
-                """,
-                unsafe_allow_html=True
-                )
-
-
-            else:
-
-
-                confidence=1-proba
-
-
-                st.markdown(
-                f"""
-                <div class="card">
-
-                <div class="nontf">
-                🚩 Non Transcription Factor
-                </div>
-
-                Confidence:
-                {confidence*100:.2f} %
-
-                </div>
-                """,
-                unsafe_allow_html=True
-                )
-
-
-
-            # Gauge
-
-
-            fig_conf=go.Figure(
-                go.Indicator(
-                    mode="gauge+number",
-                    value=confidence*100,
-                    title={
-                        "text":
-                        "Prediction confidence (%)"
-                    },
-                    gauge={
-                        "axis":{
-                            "range":[0,100]
-                        }
-                    }
-                )
-            )
-
-
-            fig_conf.update_layout(
-                height=300
-            )
-
-
-            st.plotly_chart(
-                fig_conf,
-            )
-
-
-
         except Exception as e:
-
-
-            st.error(
-                f"Prediction error: {e}"
-            )
+            status.error(f"Prediction error: {e}")

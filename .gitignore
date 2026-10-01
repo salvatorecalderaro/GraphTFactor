@@ -13,3 +13,6 @@ src/graphtfactor/__pycache__/model.cpython-310.pyc
 src/graphtfactor/__pycache__/graphtfactor.cpython-310.pyc
 src/graphtfactor/__pycache__/graph.cpython-310.pyc
 src/graphtfactor/__pycache__/__init__.cpython-310.pyc
+streamlit_app/__pycache__/utils.cpython-312.pyc
+streamlit_app/__pycache__/model.cpython-312.pyc
+streamlit_app/__pycache__/graph.cpython-312.pyc
