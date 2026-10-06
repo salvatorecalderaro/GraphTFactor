@@ -7,7 +7,6 @@ Pillow==12.3.0
 plotly==6.9.0
 py_cpuinfo==9.0.0
 streamlit==1.45.1
-torch==2.8.0
 torch==2.13.0
 torch_geometric==2.8.0.post1
 tqdm==4.67.1
