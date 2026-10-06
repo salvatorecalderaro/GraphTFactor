@@ -55,9 +55,13 @@ Choose `org` from `"All"`, `"Virus"`, `"Eukaryotic"`, or `"Prokaryotic"`. Choose
 
 Larger ESM-2 models require considerably more memory and may not run on every device.
 
-## Streamlit demo and source
+## Streamlit app
 
-The repository also contains a Streamlit demo and research experiments. See the [GitHub repository](https://github.com/salvatorecalderaro/GraphTFactor) for the application, source code, and updates.
+Try the [GraphTFactor Streamlit app](https://graphtfactor.streamlit.app/). Paste a protein sequence, select an ESM-2 model and organism group, and view the predicted class, confidence, and protein graph.
+
+![Screenshot of the GraphTFactor Streamlit app](https://raw.githubusercontent.com/salvatorecalderaro/GraphTFactor/main/images/webappp_demo.png)
+
+The app source and research experiments are available in the [GitHub repository](https://github.com/salvatorecalderaro/GraphTFactor).
 
 ## Citation
 
@@ -66,3 +70,7 @@ A paper citation will be added here when the publication details are available.
 ## License
 
 GraphTFactor is distributed under the MIT License. See [LICENSE](LICENSE).
+
+## Contact
+
+For questions, feedback, or collaboration inquiries, email [Salvatore Calderaro](mailto:salvatore.calderaro01@unipa.it) or open an issue in the [GitHub repository](https://github.com/salvatorecalderaro/GraphTFactor/issues).

@@ -1,6 +1,6 @@
 fair-esm==2.0.0
-numba==0.67.0
-numpy==2.5.2
-torch==2.8.0
-torch-geometric==2.8.0.post1
-tqdm==4.67.1
+numba<0.69,>=0.67.0
+numpy<3,>=2.5.2
+torch<3,>=2.8.0
+torch-geometric<3,>=2.8.0.post1
+tqdm<5,>=4.67.1
