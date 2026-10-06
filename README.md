@@ -1,5 +1,9 @@
 # GraphTFactor
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/salvatorecalderaro/GraphTFactor/main/images/logo.png" alt="GraphTFactor logo" width="280">
+</p>
+
 GraphTFactor predicts whether a protein is a transcription factor using protein language model embeddings and a graph neural network. It segments protein sequences with a minimum description length method, builds a graph from the segments, and predicts a class for each sequence.
 
 ## Install
