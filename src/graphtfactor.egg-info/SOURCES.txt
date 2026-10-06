@@ -9,6 +9,7 @@ src/graphtfactor/utils.py
 src/graphtfactor.egg-info/PKG-INFO
 src/graphtfactor.egg-info/SOURCES.txt
 src/graphtfactor.egg-info/dependency_links.txt
+src/graphtfactor.egg-info/requires.txt
 src/graphtfactor.egg-info/top_level.txt
 src/graphtfactor/checkpoints/All/GraphTF_12.pth
 src/graphtfactor/checkpoints/All/GraphTF_30.pth
