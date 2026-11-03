@@ -7,7 +7,7 @@
 GraphTFactor predicts whether a protein is a tran4scription factor using protein language model embeddings and a graph neural network. It segments protein sequences with a minimum description length method, builds a graph from the segments, and predicts a class for each sequence.
 
 ## Install
-[![Download totali](https://img.shields.io/pypi/dt/graphtfactor)](https://pypi.org/project/graphtfactor/)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/graphtfactor?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/graphtfactor)
 ```bash
 python -m pip install graphtfactor
 ```
