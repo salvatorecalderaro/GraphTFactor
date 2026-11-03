@@ -1,0 +1,25 @@
+Accuracy:
+  Mean: 0.9749837973467896
+  Standard Deviation: 0.020158136181147868
+Balanced Accuracy:
+  Mean: 0.9738796754758674
+  Standard Deviation: 0.012144871936554424
+Device:
+- !!python/object/new:tensorflow.python.eager.context.PhysicalDevice
+  - /physical_device:GPU:0
+  - GPU
+F1 Score:
+  Mean: 0.9525069112085631
+  Standard Deviation: 0.03378281401889814
+ROC AUC:
+  Mean: 0.994009802981403
+  Standard Deviation: 0.0016825031700616335
+Sensitivity:
+  Mean: 0.9716701983814655
+  Standard Deviation: 0.007564530704949747
+Specificity:
+  Mean: 0.9760891525702693
+  Standard Deviation: 0.028416893029209064
+Training Time:
+  Mean: 7367.847780108452
+  Standard Deviation: 28.047567032717623
