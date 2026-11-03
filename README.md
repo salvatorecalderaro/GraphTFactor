@@ -4,7 +4,7 @@
   <img src="https://raw.githubusercontent.com/salvatorecalderaro/GraphTFactor/main/images/logo.png" alt="GraphTFactor logo" width="280">
 </p>
 
-GraphTFactor predicts whether a protein is a transcription factor using protein language model embeddings and a graph neural network. It segments protein sequences with a minimum description length method, builds a graph from the segments, and predicts a class for each sequence.
+GraphTFactor predicts whether a protein is a tran4scription factor using protein language model embeddings and a graph neural network. It segments protein sequences with a minimum description length method, builds a graph from the segments, and predicts a class for each sequence.
 
 ## Install
 
@@ -64,8 +64,18 @@ Try the [GraphTFactor Streamlit app](https://graphtfactor.streamlit.app/). Paste
 The app source and research experiments are available in the [GitHub repository](https://github.com/salvatorecalderaro/GraphTFactor).
 
 ## Citation
+```
+@misc{amato2026graphtfactorgraphbasedapproachproteins,
+      title={GraphTFactor: A graph-based approach for proteins transcription factor prediction}, 
+      author={Domenico Amato and Salvatore Calderaro and Giosuè Lo Bosco and Riccardo Rizzo and Filippo Vella},
+      year={2026},
+      eprint={2610.40867},
+      archivePrefix={arXiv},
+      primaryClass={q-bio.QM},
+      url={https://arxiv.org/abs/2610.40867}, 
+}
+```
 
-A paper citation will be added here when the publication details are available.
 
 ## License
 
